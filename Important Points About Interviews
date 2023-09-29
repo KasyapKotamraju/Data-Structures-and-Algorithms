@@ -1,3 +1,5 @@
+TO BE FOLLOWED IN THE INTERVIEWS
+
 1. Don't directly jump into solving problems. First read the question thoroughly and then ask all the clarifications needed from the solutions.
 2. Few questions could be asked in an interview are 
     a. What is the size of input or range of input values ?
@@ -6,3 +8,9 @@
     d. What could be the extreme values of input ? (useful to handle edge and base cases) 
 3. Then discuss the naive solution and if that is accepted then start discussing about the optimal solution. If that too accepted start writing the code.
 4. Anytime writing code part should take less time than the prior discussion. For that you need to make everything clear before starting writing code.
+
+
+TIPS ABOUT PATTERNS AND LOGICS
+
+1. Problems statements which contains 'subarray' operations and 'array with target' can be solved using either TWO POINTERS APPROACH or 
+SLIDING WINDOW TECHNIQUE.
