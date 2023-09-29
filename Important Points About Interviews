@@ -6,6 +6,7 @@ TO BE FOLLOWED IN THE INTERVIEWS
     b. Does the input contain negative numbers, zeros, duplicates ?
     c. Does the solution is unique or there could be multiple solutions ?
     d. What could be the extreme values of input ? (useful to handle edge and base cases) 
+    e. If target does not exist what should we return (0 or -1) ?
 3. Then discuss the naive solution and if that is accepted then start discussing about the optimal solution. If that too accepted start writing the code.
 4. Anytime writing code part should take less time than the prior discussion. For that you need to make everything clear before starting writing code.
 
