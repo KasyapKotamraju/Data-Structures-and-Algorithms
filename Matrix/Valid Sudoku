@@ -137,17 +137,24 @@ class Solution {
 
 
 Solution 3 (optimal):
+Intution : Just use three integer arrays and store all the numbers in a row, in a column, in a cell at single index.
 
 class Solution {
     public boolean isValidSudoku(char[][] board) {
-        int[] row = new int[9], col = new int[9], rect = new int[9];
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (board[i][j] == '.') continue;
-                int k = board[i][j] - '0';
-                int ri = i / 3 * 3 + j / 3;
-                if ((row[i] >> k & 1)  == 1 || (col[j] >> k & 1) == 1 ||(rect[ri] >> k & 1) == 1) return false;
-                row[i] |= 1 << k; col[j] |= 1 << k; rect[ri] |= 1 << k;
+        int[] row = new int[9], col = new int[9], cell = new int[9];
+        for(int i=0; i<9; i++)
+        {
+            for(int j=0; j<9; j++)
+            {
+                if(board[i][j]!='.')
+                {
+                    int num = board[i][j] - '0';
+                    int cellIndex = i/3 * 3 + j/3;
+                    if((row[i] >> num & 1)==1 || (col[j] >> num & 1)==1 || (cell[cellIndex] >> num & 1)==1)return false;
+                    row[i] |= 1 << num; // store the number in its corresponding row index
+                    col[j] |= 1 << num; // store the number in its corresponding column index
+                    cell[cellIndex] |= 1 << num; // store the number in its corresponding cell index
+                }
             }
         }
         return true;
