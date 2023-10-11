@@ -1,0 +1,68 @@
+Given the roots of two binary trees p and q, write a function to check if they are the same or not.
+
+Two binary trees are considered the same if they are structurally identical, and the nodes have the same value.
+
+ 
+
+Example 1:
+
+
+Input: p = [1,2,3], q = [1,2,3]
+Output: true
+Example 2:
+
+
+Input: p = [1,2], q = [1,null,2]
+Output: false
+Example 3:
+
+
+Input: p = [1,2,1], q = [1,1,2]
+Output: false
+ 
+
+Constraints:
+
+The number of nodes in both trees is in the range [0, 100].
+-104 <= Node.val <= 104
+
+Intution : 
+While solving any problem involving trees(both normal and search) we need to be more clearer about the base cases. If we can get those base cases correctly solution is almost completed.
+
+Here the three base cases are
+
+Both the nodes becoming null (Reached end, have to return true)
+Either of the nodes becoming null (have to return false)
+Both nodes are not null but their values are not equal (have to return false)
+Iterate recursively through the nodes of both the trees at a time.
+First traverse in left direction and then in right direction.
+If encountered false in between stop iterating and return false, otherwise true.
+
+
+Solution :
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if(p==null && q==null) return true;
+        if(p==null || q==null) return false;
+        if(p.val!=q.val)return false;
+        if(!isSameTree(p.left, q.left)) return false;
+        if(!isSameTree(p.right, q.right)) return false;
+        return true;
+    }
+}
