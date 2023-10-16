@@ -1,0 +1,95 @@
+https://leetcode.com/problems/arranging-coins/description/
+
+You have n coins and you want to build a staircase with these coins. The staircase consists of k rows where the ith row has exactly i coins. The last row of the staircase may be incomplete.
+
+Given the integer n, return the number of complete rows of the staircase you will build.
+
+ 
+
+Example 1:
+
+
+Input: n = 5
+Output: 2
+Explanation: Because the 3rd row is incomplete, we return 2.
+Example 2:
+
+
+Input: n = 8
+Output: 3
+Explanation: Because the 4th row is incomplete, we return 3.
+ 
+
+Constraints:
+
+1 <= n <= 231 - 1
+
+Solution 1 : TC : O(n)
+
+class Solution {
+    public int arrangeCoins(int n) {
+        int row=0, count = 1;
+        n -= count;
+        while(n >= 0)
+        {
+            row++;
+            count++;
+            n -= count;
+        }
+        return row;
+    }
+}
+
+Solution 2 : TC : O(1)
+
+For any number n this solution runs only for 15 iterations
+
+class Solution {
+    public int arrangeCoins(int n) {
+        int mask = 1 << 15;  // sqrt(32 bit number)
+        long result = 0;
+        while(mask > 0)
+        {
+            long temp = result | mask;
+            if(temp * (temp+1)/2 == n)return (int)temp;
+            else if(temp * (temp+1)/2 < n)
+            {
+                result  = temp;
+            }
+            mask >>= 1;
+        }
+        return (int)result;
+    }
+}
+
+Solution 3 : TC : O(logn)
+
+As the search space is sorted (1 to n) and we are asked to find a number in that space, so binary search could be a solution
+
+class Solution {
+    public int arrangeCoins(int n) {
+        if(n==0)return 0;
+        else if(n<=3)
+        {
+            return n==3 ? 2 : 1;
+        }
+        long start = 2, end = n/2;
+        // int result = 0;
+        while(start<=end)
+        {
+            long mid = (start+end)/2;
+            long temp = mid*(mid+1)/2;
+            if(temp==n)return (int)mid;
+            else if(temp < n)
+            {
+                start = mid + 1;
+                // result = mid;
+            }
+            else
+            {
+                end = mid - 1;
+            }
+        }
+        return (int)end;
+    }
+}
