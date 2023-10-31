@@ -1,0 +1,116 @@
+https://leetcode.com/problems/sum-of-root-to-leaf-binary-numbers/description/
+
+You are given the root of a binary tree where each node has a value 0 or 1. Each root-to-leaf path represents a binary number starting with the most significant bit.
+
+For example, if the path is 0 -> 1 -> 1 -> 0 -> 1, then this could represent 01101 in binary, which is 13.
+For all leaves in the tree, consider the numbers represented by the path from the root to that leaf. Return the sum of these numbers.
+
+The test cases are generated so that the answer fits in a 32-bits integer.
+
+ 
+
+Example 1:
+
+
+Input: root = [1,0,1,0,1,0,1]
+Output: 22
+Explanation: (100) + (101) + (110) + (111) = 4 + 5 + 6 + 7 = 22
+Example 2:
+
+Input: root = [0]
+Output: 0
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [1, 1000].
+Node.val is 0 or 1.
+
+Solution 1 : My recusive solution
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int strToDec(String s)
+    {
+        int power = 1, num = 0;
+        for(int i=s.length()-1; i>=0; i--)
+        {
+            if(s.charAt(i) - '0' ==1)
+            {
+                num += power;
+            }
+            power = power * 2;
+        }
+        return num;
+    }
+    public List<String> helper(TreeNode root, String curr)
+    {
+        List<String> binaries = new ArrayList<>();
+        List<String> leftBinaries = new ArrayList<>();
+        List<String> rightBinaries = new ArrayList<>();
+        if(root.left==null && root.right==null)
+        {
+            String str = curr + root.val;
+            binaries.add(str);
+            return binaries;
+        }
+        if(root.left!=null)leftBinaries = helper(root.left, "");
+        if(root.right!=null)rightBinaries = helper(root.right, "");
+        for(int i=0; i<leftBinaries.size(); i++)
+        {
+            String str = leftBinaries.get(i);
+            str = "" + root.val + str;
+            binaries.add(str);
+        }
+        for(int i=0; i<rightBinaries.size(); i++)
+        {
+            String str = rightBinaries.get(i);
+            str = "" + root.val + str;
+            binaries.add(str);
+        }
+        return binaries;
+    }
+    public int sumRootToLeaf(TreeNode root) {
+        List<String> binary = helper(root, "");
+        int total = 0;
+        for(int i=0; i<binary.size(); i++)
+        {
+            // System.out.print(binary.get(i) + " ");
+            total += strToDec(binary.get(i));
+        }
+        return total;
+    }
+}
+
+Solution 2 : optimal solution 
+
+class Solution {
+    public int helper(TreeNode root, int prevSum)
+    {
+        if(root==null)return 0;
+        if(root.left==null && root.right==null)
+        {
+            return 2*prevSum + root.val;
+        }
+        return helper(root.left, 2*prevSum+root.val) + helper(root.right, 2*prevSum+root.val);
+
+    }
+    public int sumRootToLeaf(TreeNode root) {
+        if(root==null)return 0;
+        return helper(root, 0);
+    }
+}
