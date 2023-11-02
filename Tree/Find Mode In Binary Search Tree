@@ -1,0 +1,126 @@
+https://leetcode.com/problems/find-mode-in-binary-search-tree/description/
+
+Given the root of a binary search tree (BST) with duplicates, return all the mode(s) (i.e., the most frequently occurred element) in it.
+
+If the tree has more than one mode, return them in any order.
+
+Assume a BST is defined as follows:
+
+The left subtree of a node contains only nodes with keys less than or equal to the node's key.
+The right subtree of a node contains only nodes with keys greater than or equal to the node's key.
+Both the left and right subtrees must also be binary search trees.
+ 
+
+Example 1:
+
+
+Input: root = [1,null,2,2]
+Output: [2]
+Example 2:
+
+Input: root = [0]
+Output: [0]
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [1, 104].
+-105 <= Node.val <= 105
+
+Solution 1 : Without using hash table (assuming that duplicates occur in consecutive order)
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    List<Integer> modes = new ArrayList<>();
+    int currVal = 0, currCount = 0, maxCount = 0;
+    public void inOrderTraversal(TreeNode root)
+    {
+        if(root==null)return ;
+        inOrderTraversal(root.left);
+        if(currCount==0 || root.val!=currVal)
+        {
+            currVal = root.val;
+            currCount = 1;
+        }
+        else if(root.val==currVal)
+        {
+            currCount++;
+        }
+        if(currCount>maxCount)
+        {
+            maxCount = currCount;
+            modes.clear();
+            modes.add(currVal);
+        }
+        else if(currCount==maxCount)
+        {
+            modes.add(currVal);
+        }
+        inOrderTraversal(root.right);
+    }
+    public int[] findMode(TreeNode root) {
+        inOrderTraversal(root);
+        int[] arr = new int[modes.size()];
+        for(int i=0; i<arr.length; i++)
+        {
+            arr[i] = modes.get(i);
+        }
+        return arr;
+    }
+}
+
+Solution 2 : Using hash table (works irrespective of duplicates order)
+
+class Solution {
+    Map<Integer, Integer> mp = new HashMap<>();
+    int maxFrequency = 0;
+    public void inOrderTraversal(TreeNode root)
+    {
+        if(root==null)return ;
+        inOrderTraversal(root.left);
+        if(!mp.containsKey(root.val))
+        {
+            mp.put(root.val, 1);
+            maxFrequency = Math.max(maxFrequency, 1);
+        }
+        else 
+        {
+            int prevFreq = mp.get(root.val);
+            prevFreq++;
+            mp.put(root.val, prevFreq);
+            maxFrequency = Math.max(maxFrequency, prevFreq);
+        }
+        inOrderTraversal(root.right);
+    }
+    public int[] findMode(TreeNode root) {
+        inOrderTraversal(root);
+        List<Integer> modes = new ArrayList<>();
+        for(Map.Entry<Integer, Integer> entry : mp.entrySet())
+        {
+            if(entry.getValue()==maxFrequency)
+            {
+                modes.add(entry.getKey());
+            }
+        }
+        int[] res = new int[modes.size()];
+        for(int i=0; i<modes.size(); i++)
+        {
+            res[i] = modes.get(i);
+        }
+        return res;
+    }
+}
