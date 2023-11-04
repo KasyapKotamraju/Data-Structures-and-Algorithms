@@ -1,0 +1,103 @@
+https://leetcode.com/problems/cousins-in-binary-tree/description/
+
+Given the root of a binary tree with unique values and the values of two different nodes of the tree x and y, return true if the nodes corresponding to the values x and y in the tree are cousins, or false otherwise.
+
+Two nodes of a binary tree are cousins if they have the same depth with different parents.
+
+Note that in a binary tree, the root node is at the depth 0, and children of each depth k node are at the depth k + 1.
+
+ 
+
+Example 1:
+
+
+Input: root = [1,2,3,4], x = 4, y = 3
+Output: false
+Example 2:
+
+
+Input: root = [1,2,3,null,4,null,5], x = 5, y = 4
+Output: true
+Example 3:
+
+
+Input: root = [1,2,3,null,4], x = 2, y = 3
+Output: false
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [2, 100].
+1 <= Node.val <= 100
+Each node has a unique value.
+x != y
+x and y are exist in the tree.
+
+Solution 1 : Using BFS and hash map
+
+class Solution {
+    public boolean isCousins(TreeNode root, int x, int y) {
+        if(root==null)return false;
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(root);
+        while(!q.isEmpty())
+        {
+            // List<String> arr = new ArrayList<>();
+            Map<Integer, Integer> mp = new HashMap<>();
+            int n = q.size();
+            for(int i=0; i<n; i++)
+            {
+                
+                TreeNode node = q.poll();
+                if(node.left!=null)
+                {
+                    mp.put(node.left.val, node.val);
+                    q.offer(node.left);
+                }
+                if(node.right!=null)
+                {
+                    mp.put(node.right.val, node.val);
+                    q.offer(node.right);
+                }
+            }
+            if(mp.containsKey(x) && mp.containsKey(y))
+            {
+                if(mp.get(x)!=mp.get(y))
+                {
+                    return true;
+                }
+                else return false;
+            }
+        }
+        return false;
+    }
+}
+
+Solution 2 : Using dfs
+
+class Solution {
+    int xdepth = -1, ydepth = -1, xpar = -1, ypar =-1;
+    public void inOrder(TreeNode root, int x, int y, int depth, TreeNode parent)
+    {
+        if(root==null)return ;
+        inOrder(root.left, x, y, depth+1, root);
+        if(root.val==x && parent!=null)
+        {
+            xdepth = depth;
+            xpar = parent.val;
+        }
+        if(root.val==y && parent!=null)
+        {
+            ydepth = depth;
+            ypar = parent.val;
+        }
+        inOrder(root.right, x, y, depth+1, root);
+    }
+    public boolean isCousins(TreeNode root, int x, int y) {
+        inOrder(root, x, y, 0, null);
+        if(xdepth==-1 || ydepth==-1 || xpar==-1 || ypar==-1)return false;
+        if(xdepth==ydepth && xpar!=ypar)return true;
+        // else return true;
+        return false;
+    }
+}
